@@ -1,0 +1,42 @@
+# required by www-client/firefox-78.5.0::gentoo
+# required by firefox (argument)
+>=media-libs/libpng-1.6.37-r2 apng
+# required by www-client/firefox-78.5.0::gentoo[system-libvpx]
+# required by firefox (argument)
+>=media-libs/libvpx-1.9.0 postproc
+# required by www-client/firefox-78.5.0::gentoo
+# required by firefox (argument)
+>=dev-lang/python-3.9.0 sqlite
+# required by www-client/chromium-87.0.4280.88
+>=net-libs/nodejs-14.15.1 inspector
+
+dev-libs/elfutils abi_x86_32
+app-arch/bzip2 abi_x86_32
+www-client/w3m imlib
+dev-libs/libxml2 icu
+media-libs/harfbuzz icu
+x11-libs/libva abi_x86_32
+app-text/xmlto text
+
+x11-libs/libX11 abi_x86_32
+x11-libs/libXau abi_x86_32
+x11-libs/libxcb abi_x86_32
+x11-libs/libXdmcp abi_x86_32
+x11-base/xcb-proto abi_x86_32
+virtual/opengl abi_x86_32
+dev-libs/expat abi_x86_32
+media-libs/libglvnd abi_x86_32
+sys-libs/zlib abi_x86_32 minizip
+dev-libs/wayland abi_x86_32
+x11-libs/libxshmfence abi_x86_32
+x11-libs/libXdamage abi_x86_32
+x11-libs/libXext abi_x86_32
+x11-libs/libXxf86vm abi_x86_32
+x11-libs/libXfixes abi_x86_32
+app-arch/zstd abi_x86_32
+sys-devel/llvm abi_x86_32
+x11-libs/libXrandr abi_x86_32
+x11-libs/libXrender abi_x86_32
+dev-libs/libffi abi_x86_32
+sys-libs/ncurses abi_x86_32
+virtual/libelf abi_x86_32

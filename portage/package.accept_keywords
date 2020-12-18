@@ -1,0 +1,8 @@
+x11-terms/kitty amd64 ~amd64
+x11-terms/kitty-terminfo
+x11-misc/rofi
+net-im/discord-bin
+games-util/steam-launcher
+games-util/game-device-udev-rules
+www-client/firefox
+dev-libs/nss
