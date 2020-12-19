@@ -1,0 +1,21 @@
+app-editors/vim terminal
+x11-misc/libinput-gestures python3_7 python_single_target_python3_7
+dev-libs/libpcre2 pcre16
+# required by x11-libs/libva-intel-driver-2.4.1::gentoo
+>=x11-libs/libva-2.7.1 abi_x86_32
+# required by x11-libs/libva-2.7.1::gentoo[video_cards_intel,-video_cards_i965]
+# required by media-video/ffmpeg-4.3.1::gentoo[vaapi]
+# required by www-client/firefox-bin-83.0::gentoo[ffmpeg]
+# required by @selected
+# required by @world (argument)
+>=x11-libs/libva-intel-driver-2.4.1 abi_x86_32
+# required by www-client/firefox-78.5.0::gentoo
+# required by firefox (argument)
+>=media-libs/libpng-1.6.37-r2 apng
+# required by www-client/firefox-78.5.0::gentoo[system-libvpx]
+# required by firefox (argument)
+>=media-libs/libvpx-1.9.0 postproc
+# required by www-client/firefox-78.5.0::gentoo
+# required by firefox (argument)
+>=dev-lang/python-3.9.0 sqlite
+www-client/firefox hwaccel wayland
