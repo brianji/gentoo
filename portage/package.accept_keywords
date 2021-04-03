@@ -1,8 +1,8 @@
-x11-terms/kitty amd64 ~amd64
-x11-terms/kitty-terminfo
-x11-misc/rofi
-net-im/discord-bin
-games-util/steam-launcher
-games-util/game-device-udev-rules
-www-client/firefox
-dev-libs/nss
+dev-libs/nss ~amd64
+games-action/multimc
+games-util/game-device-udev-rules ~amd64
+games-util/steam-launcher ~amd64
+x11-misc/dmenu **
+x11-misc/tabbed **
+x11-terms/st **
+x11-wm/dwm **

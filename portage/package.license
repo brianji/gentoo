@@ -1,5 +1,5 @@
-# required by linux-firmware (argument)
-=sys-kernel/linux-firmware-20201022-r3 linux-fw-redistributable no-source-code
+# required by sys-kernel/linux-firmware (argument)
+>=sys-kernel/linux-firmware-20210208 linux-fw-redistributable no-source-code
 # required by discord-bin (argument)
 >=net-im/discord-bin-0.0.13 all-rights-reserved
 # required by games-util/steam-launcher (argument)

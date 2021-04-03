@@ -1,0 +1,290 @@
+diff --git a/data/language/en-US.txt b/data/language/en-US.txt
+index e7fbfe6..38921f7 100644
+--- a/data/language/en-US.txt
++++ b/data/language/en-US.txt
+@@ -242,6 +242,9 @@ STR_6274    :Can't set color scheme…
+ STR_6307    :Color scheme: {BLACK}{STRINGID}
+ STR_6328    :{SMALLFONT}{BLACK}With this option enabled, giant screenshots will have a transparent background instead of the default black color.
+ 
++STR_6399    :Guests do not leave
++STR_6400    :Guests will no longer leave the park
++
+ #############
+ # Scenarios #
+ #############
+diff --git a/src/openrct2-ui/windows/Cheats.cpp b/src/openrct2-ui/windows/Cheats.cpp
+index ebccd44..4bbd83d 100644
+--- a/src/openrct2-ui/windows/Cheats.cpp
++++ b/src/openrct2-ui/windows/Cheats.cpp
+@@ -119,6 +119,7 @@ enum WINDOW_CHEATS_WIDGET_IDX
+     WIDX_GUEST_IGNORE_RIDE_INTENSITY,
+     WIDX_DISABLE_VANDALISM,
+     WIDX_DISABLE_LITTERING,
++    WIDX_DISABLE_LEAVING,
+     WIDX_GIVE_ALL_GUESTS_GROUP,
+     WIDX_GIVE_GUESTS_MONEY,
+     WIDX_GIVE_GUESTS_PARK_MAPS,
+@@ -225,7 +226,7 @@ static rct_widget window_cheats_money_widgets[] =
+ static rct_widget window_cheats_guests_widgets[] =
+ {
+     MAIN_CHEATS_WIDGETS,
+-    MakeWidget({  5,  48}, {238, 279},    WWT_GROUPBOX, WindowColour::Secondary, STR_CHEAT_SET_GUESTS_PARAMETERS                                 ), // Guests parameters group frame
++    MakeWidget({  5,  48}, {238, 300},    WWT_GROUPBOX, WindowColour::Secondary, STR_CHEAT_SET_GUESTS_PARAMETERS                                 ), // Guests parameters group frame
+     MakeWidget({183,  69}, MINMAX_BUTTON, WWT_BUTTON,   WindowColour::Secondary, STR_MAX                                                         ), // happiness max
+     MakeWidget({127,  69}, MINMAX_BUTTON, WWT_BUTTON,   WindowColour::Secondary, STR_MIN                                                         ), // happiness min
+     MakeWidget({183,  90}, MINMAX_BUTTON, WWT_BUTTON,   WindowColour::Secondary, STR_MAX                                                         ), // energy max
+@@ -245,14 +246,15 @@ static rct_widget window_cheats_guests_widgets[] =
+     MakeWidget({ 11, 258}, CHEAT_CHECK,   WWT_CHECKBOX, WindowColour::Secondary, STR_CHEAT_IGNORE_INTENSITY,      STR_CHEAT_IGNORE_INTENSITY_TIP ), // guests ignore intensity
+     MakeWidget({ 11, 279}, CHEAT_CHECK,   WWT_CHECKBOX, WindowColour::Secondary, STR_CHEAT_DISABLE_VANDALISM,     STR_CHEAT_DISABLE_VANDALISM_TIP), // disable vandalism
+     MakeWidget({ 11, 300}, CHEAT_CHECK,   WWT_CHECKBOX, WindowColour::Secondary, STR_CHEAT_DISABLE_LITTERING,     STR_CHEAT_DISABLE_LITTERING_TIP), // disable littering
+-    MakeWidget({  5, 342}, {238,  69},    WWT_GROUPBOX, WindowColour::Secondary, STR_CHEAT_GIVE_ALL_GUESTS                                       ), // Guests parameters group frame
+-    MakeWidget({ 11, 363}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_CURRENCY_FORMAT                                       ), // give guests money
+-    MakeWidget({127, 363}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_PARK_MAP                                   ), // give guests park maps
+-    MakeWidget({ 11, 384}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_BALLOON                                    ), // give guests balloons
+-    MakeWidget({127, 384}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_UMBRELLA                                   ), // give guests umbrellas
+-    MakeWidget({ 11, 426}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_LARGE_TRAM_GUESTS,     STR_CHEAT_LARGE_TRAM_GUESTS_TIP), // large tram
+-    MakeWidget({127, 426}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_REMOVE_ALL_GUESTS,     STR_CHEAT_REMOVE_ALL_GUESTS_TIP), // remove all guests
+-    MakeWidget({ 11, 447}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_EXPLODE,               STR_CHEAT_EXPLODE_TIP          ), // explode guests
++    MakeWidget({ 11, 321}, CHEAT_CHECK,   WWT_CHECKBOX, WindowColour::Secondary, STR_CHEAT_DISABLE_LEAVING,       STR_CHEAT_DISABLE_LEAVING_TIP  ), // guests do not leave
++    MakeWidget({  5, 363}, {238,  69},    WWT_GROUPBOX, WindowColour::Secondary, STR_CHEAT_GIVE_ALL_GUESTS                                       ), // Guests parameters group frame
++    MakeWidget({ 11, 384}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_CURRENCY_FORMAT                                       ), // give guests money
++    MakeWidget({127, 384}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_PARK_MAP                                   ), // give guests park maps
++    MakeWidget({ 11, 405}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_BALLOON                                    ), // give guests balloons
++    MakeWidget({127, 405}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_SHOP_ITEM_PLURAL_UMBRELLA                                   ), // give guests umbrellas
++    MakeWidget({ 11, 447}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_LARGE_TRAM_GUESTS,     STR_CHEAT_LARGE_TRAM_GUESTS_TIP), // large tram
++    MakeWidget({127, 447}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_REMOVE_ALL_GUESTS,     STR_CHEAT_REMOVE_ALL_GUESTS_TIP), // remove all guests
++    MakeWidget({ 11, 468}, CHEAT_BUTTON,  WWT_BUTTON,   WindowColour::Secondary, STR_CHEAT_EXPLODE,               STR_CHEAT_EXPLODE_TIP          ), // explode guests
+     { WIDGETS_END },
+ };
+ 
+@@ -439,7 +441,8 @@ static uint64_t window_cheats_page_enabled_widgets[] = {
+     (1ULL << WIDX_REMOVE_ALL_GUESTS) |
+     (1ULL << WIDX_EXPLODE_GUESTS) |
+     (1ULL << WIDX_DISABLE_VANDALISM) |
+-    (1ULL << WIDX_DISABLE_LITTERING),
++    (1ULL << WIDX_DISABLE_LITTERING) |
++    (1ULL << WIDX_DISABLE_LEAVING),
+ 
+     MAIN_CHEAT_ENABLED_WIDGETS |
+     (1ULL << WIDX_FREEZE_WEATHER) |
+@@ -811,6 +814,9 @@ static void window_cheats_guests_mouseup(rct_window* w, rct_widgetindex widgetIn
+         case WIDX_DISABLE_LITTERING:
+             CheatsSet(CheatType::DisableLittering, !gCheatsDisableLittering);
+             break;
++	case WIDX_DISABLE_LEAVING:
++	    CheatsSet(CheatType::DisableLeaving, !gCheatsDisableLeaving);
++	    break;
+     }
+ }
+ 
+@@ -1064,6 +1070,7 @@ static void window_cheats_invalidate(rct_window* w)
+             widget_set_checkbox_value(w, WIDX_GUEST_IGNORE_RIDE_INTENSITY, gCheatsIgnoreRideIntensity);
+             widget_set_checkbox_value(w, WIDX_DISABLE_VANDALISM, gCheatsDisableVandalism);
+             widget_set_checkbox_value(w, WIDX_DISABLE_LITTERING, gCheatsDisableLittering);
++            widget_set_checkbox_value(w, WIDX_DISABLE_LEAVING, gCheatsDisableLeaving);
+         }
+         break;
+ 
+diff --git a/src/openrct2/Cheats.cpp b/src/openrct2/Cheats.cpp
+index da04868..4cbce80 100644
+--- a/src/openrct2/Cheats.cpp
++++ b/src/openrct2/Cheats.cpp
+@@ -43,6 +43,7 @@ bool gCheatsBuildInPauseMode = false;
+ bool gCheatsIgnoreRideIntensity = false;
+ bool gCheatsDisableVandalism = false;
+ bool gCheatsDisableLittering = false;
++bool gCheatsDisableLeaving = false;
+ bool gCheatsNeverendingMarketing = false;
+ bool gCheatsFreezeWeather = false;
+ bool gCheatsDisableTrainLengthLimit = false;
+@@ -70,6 +71,7 @@ void CheatsReset()
+     gCheatsIgnoreRideIntensity = false;
+     gCheatsDisableVandalism = false;
+     gCheatsDisableLittering = false;
++    gCheatsDisableLeaving = false;
+     gCheatsNeverendingMarketing = false;
+     gCheatsFreezeWeather = false;
+     gCheatsDisablePlantAging = false;
+@@ -116,6 +118,7 @@ void CheatsSerialise(DataSerialiser& ds)
+         CheatEntrySerialise(ds, CheatType::IgnoreRideIntensity, gCheatsIgnoreRideIntensity, count);
+         CheatEntrySerialise(ds, CheatType::DisableVandalism, gCheatsDisableVandalism, count);
+         CheatEntrySerialise(ds, CheatType::DisableLittering, gCheatsDisableLittering, count);
++        CheatEntrySerialise(ds, CheatType::DisableLeaving, gCheatsDisableLeaving, count);
+         CheatEntrySerialise(ds, CheatType::NeverEndingMarketing, gCheatsNeverendingMarketing, count);
+         CheatEntrySerialise(ds, CheatType::FreezeWeather, gCheatsFreezeWeather, count);
+         CheatEntrySerialise(ds, CheatType::DisableTrainLengthLimit, gCheatsDisableTrainLengthLimit, count);
+@@ -183,6 +186,9 @@ void CheatsSerialise(DataSerialiser& ds)
+                 case CheatType::DisableLittering:
+                     ds << gCheatsDisableLittering;
+                     break;
++                case CheatType::DisableLeaving:
++                    ds << gCheatsDisableLeaving;
++                    break;
+                 case CheatType::NeverEndingMarketing:
+                     ds << gCheatsNeverendingMarketing;
+                     break;
+@@ -252,6 +258,8 @@ const char* CheatsGetName(CheatType cheatType)
+             return language_get_string(STR_CHEAT_DISABLE_VANDALISM);
+         case CheatType::DisableLittering:
+             return language_get_string(STR_CHEAT_DISABLE_LITTERING);
++        case CheatType::DisableLeaving:
++            return language_get_string(STR_CHEAT_DISABLE_LEAVING);
+         case CheatType::NoMoney:
+             return language_get_string(STR_MAKE_PARK_NO_MONEY);
+         case CheatType::AddMoney:
+diff --git a/src/openrct2/Cheats.h b/src/openrct2/Cheats.h
+index 7f239e9..834020d 100644
+--- a/src/openrct2/Cheats.h
++++ b/src/openrct2/Cheats.h
+@@ -24,6 +24,7 @@ extern bool gCheatsBuildInPauseMode;
+ extern bool gCheatsIgnoreRideIntensity;
+ extern bool gCheatsDisableVandalism;
+ extern bool gCheatsDisableLittering;
++extern bool gCheatsDisableLeaving;
+ extern bool gCheatsNeverendingMarketing;
+ extern bool gCheatsFreezeWeather;
+ extern bool gCheatsDisableTrainLengthLimit;
+@@ -52,6 +53,7 @@ enum class CheatType : int32_t
+     IgnoreRideIntensity,
+     DisableVandalism,
+     DisableLittering,
++    DisableLeaving,
+     NoMoney,
+     AddMoney,
+     SetMoney,
+diff --git a/src/openrct2/actions/SetCheatAction.hpp b/src/openrct2/actions/SetCheatAction.hpp
+index 324c9d0..b3e6c3c 100644
+--- a/src/openrct2/actions/SetCheatAction.hpp
++++ b/src/openrct2/actions/SetCheatAction.hpp
+@@ -143,6 +143,10 @@ public:
+             case CheatType::DisableLittering:
+                 gCheatsDisableLittering = _param1 != 0;
+                 break;
++            case CheatType::DisableLeaving:
++                gCheatsDisableLeaving = _param1 != 0;
++		CheatGuestCancelLeave(gCheatsDisableLeaving);
++                break;
+             case CheatType::NoMoney:
+                 SetScenarioNoMoney(_param1 != 0);
+                 break;
+@@ -299,6 +303,8 @@ private:
+                 [[fallthrough]];
+             case CheatType::DisableLittering:
+                 [[fallthrough]];
++            case CheatType::DisableLeaving:
++                [[fallthrough]];
+             case CheatType::NoMoney:
+                 [[fallthrough]];
+             case CheatType::DisablePlantAging:
+@@ -770,4 +776,17 @@ private:
+             }
+         }
+     }
++
++    void CheatGuestCancelLeave(bool cheatEnabled) const 
++    {
++        if (!cheatEnabled)
++            return;
++
++        for (auto peep : EntityList<Guest>(EntityListId::Peep))
++        {
++            peep->PeepFlags &= ~PEEP_FLAGS_LEAVING_PARK;
++            peep->PeepFlags &= ~PEEP_FLAGS_PARK_ENTRANCE_CHOSEN;
++            peep->UpdateSpriteType();
++        }
++    }
+ };
+diff --git a/src/openrct2/localisation/StringIds.h b/src/openrct2/localisation/StringIds.h
+index 85612b9..b94fcd3 100644
+--- a/src/openrct2/localisation/StringIds.h
++++ b/src/openrct2/localisation/StringIds.h
+@@ -3903,6 +3903,9 @@ enum
+     STR_DISABLE_SCREENSAVER_TIP = 6397,
+ 
+     STR_FILE_CONTAINS_UNSUPPORTED_RIDE_TYPES = 6398,
++
++    STR_CHEAT_DISABLE_LEAVING = 6399,
++    STR_CHEAT_DISABLE_LEAVING_TIP = 6400,
+     // Have to include resource strings (from scenarios and objects) for the time being now that language is partially working
+     /* MAX_STR_COUNT = 32768 */ // MAX_STR_COUNT - upper limit for number of strings, not the current count strings
+ };
+diff --git a/src/openrct2/network/NetworkBase.cpp b/src/openrct2/network/NetworkBase.cpp
+index 98ceb82..a634d19 100644
+--- a/src/openrct2/network/NetworkBase.cpp
++++ b/src/openrct2/network/NetworkBase.cpp
+@@ -2750,6 +2750,7 @@ bool NetworkBase::LoadMap(IStream* stream)
+         gCheatsIgnoreRideIntensity = stream->ReadValue<uint8_t>() != 0;
+         gCheatsDisableVandalism = stream->ReadValue<uint8_t>() != 0;
+         gCheatsDisableLittering = stream->ReadValue<uint8_t>() != 0;
++        gCheatsDisableLeaving = stream->ReadValue<uint8_t>() != 0;
+         gCheatsNeverendingMarketing = stream->ReadValue<uint8_t>() != 0;
+         gCheatsFreezeWeather = stream->ReadValue<uint8_t>() != 0;
+         gCheatsDisablePlantAging = stream->ReadValue<uint8_t>() != 0;
+@@ -2799,6 +2800,7 @@ bool NetworkBase::SaveMap(IStream* stream, const std::vector<const ObjectReposit
+         stream->WriteValue<uint8_t>(gCheatsIgnoreRideIntensity);
+         stream->WriteValue<uint8_t>(gCheatsDisableVandalism);
+         stream->WriteValue<uint8_t>(gCheatsDisableLittering);
++        stream->WriteValue<uint8_t>(gCheatsDisableLeaving);
+         stream->WriteValue<uint8_t>(gCheatsNeverendingMarketing);
+         stream->WriteValue<uint8_t>(gCheatsFreezeWeather);
+         stream->WriteValue<uint8_t>(gCheatsDisablePlantAging);
+diff --git a/src/openrct2/peep/Guest.cpp b/src/openrct2/peep/Guest.cpp
+index a79aa0e..eabdf5d 100644
+--- a/src/openrct2/peep/Guest.cpp
++++ b/src/openrct2/peep/Guest.cpp
+@@ -3138,6 +3138,10 @@ static void peep_decide_whether_to_leave_park(Peep* peep)
+  */
+ static void peep_leave_park(Peep* peep)
+ {
++    if (gCheatsDisableLeaving)
++        return;
++
++
+     peep->GuestHeadingToRideId = RIDE_ID_NULL;
+     if (peep->PeepFlags & PEEP_FLAGS_LEAVING_PARK)
+     {
+@@ -3350,10 +3354,12 @@ static bool peep_should_use_cash_machine(Peep* peep, ride_id_t rideIndex)
+         return false;
+     if (peep->CashInPocket > MONEY(20, 00))
+         return false;
+-    if (115 + (scenario_rand() % 128) > peep->Happiness)
+-        return false;
+-    if (peep->Energy < 80)
+-        return false;
++    if (!gCheatsDisableLeaving) {
++        if (115 + (scenario_rand() % 128) > peep->Happiness)
++            return false;
++        if (peep->Energy < 80)
++            return false;
++    }
+ 
+     auto ride = get_ride(rideIndex);
+     if (ride != nullptr)
+diff --git a/src/openrct2/peep/GuestPathfinding.cpp b/src/openrct2/peep/GuestPathfinding.cpp
+index 34342ac..6fa885a 100644
+--- a/src/openrct2/peep/GuestPathfinding.cpp
++++ b/src/openrct2/peep/GuestPathfinding.cpp
+@@ -17,6 +17,7 @@
+ #include "../util/Util.h"
+ #include "../world/Entrance.h"
+ #include "../world/Footpath.h"
++#include "../Cheats.h"
+ #include "Peep.h"
+ #include "Staff.h"
+ 
+@@ -1755,7 +1756,15 @@ static int32_t guest_path_find_park_entrance(Peep* peep, uint8_t edges)
+ #endif // defined(DEBUG_LEVEL_1) && DEBUG_LEVEL_1
+ 
+     if (chosenDirection == INVALID_DIRECTION)
++    {
++        if (gCheatsDisableLeaving)
++        {
++            peep->PeepFlags &= ~PEEP_FLAGS_LEAVING_PARK;
++            peep->PeepFlags &= ~PEEP_FLAGS_PARK_ENTRANCE_CHOSEN;
++            return 0;
++        }
+         return guest_path_find_aimless(peep, edges);
++    }
+     else
+         return peep_move_one_tile(chosenDirection, peep);
+ }

@@ -1,9 +1,0 @@
-app-editors/vim terminal
-x11-libs/libdrm video_cards_radeon abi_x86_32
-x11-wm/bspwm examples
-x11-misc/redshift geoclue
-x11-misc/dunst dunstify
-x11-libs/gtk+ wayland
-media-libs/mesa wayland vulkan abi_x86_32
-app-text/ghostscript-gpl cups
-www-client/firefox hwaccel wayland
