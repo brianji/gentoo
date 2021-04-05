@@ -1646,9 +1646,7 @@ CONFIG_R8169=y
 # CONFIG_NET_VENDOR_VIA is not set
 # CONFIG_NET_VENDOR_WIZNET is not set
 # CONFIG_NET_VENDOR_XILINX is not set
-CONFIG_FDDI=y
-# CONFIG_DEFXX is not set
-# CONFIG_SKFP is not set
+# CONFIG_FDDI is not set
 # CONFIG_HIPPI is not set
 # CONFIG_NET_SB1000 is not set
 CONFIG_PHYLIB=y
